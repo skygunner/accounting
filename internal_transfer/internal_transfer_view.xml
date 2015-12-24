@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<openerp>
+    <data>
+        <record model='ir.ui.view' id='internal_transfer_search'>
+            <field name='name'>Internal Transfer Search</field>
+            <field name="model">internal.transfer</field>
+            <field name='arch' type='xml'>
+                <search string="Internal Transfer">
+                    <field name="source_journal_id"/>
+                    <field name="target_journal_id"/>
+                    <field name="amount"/>
+                    <field name="date"/>
+                    <field name="ref"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Source Journal" domain="[]" context="{'group_by' : 'source_journal_id'}"/>
+                        <filter string="Target Journal" domain="[]" context="{'group_by' : 'target_journal_id'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by' : 'company_id'}"
+                                groups="base.group_multi_company"/>
+                        <filter string="State" domain="[]" context="{'group_by' : 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='internal_transfer_tree'>
+            <field name='name'>Internal Transfer</field>
+            <field name="model">internal.transfer</field>
+            <field name='arch' type='xml'>
+                <tree colors="blue:state == 'draft';gray:state == 'cancel'" string="Internal Transfer">
+                    <field name="source_journal_id"/>
+                    <field name="target_journal_id"/>
+                    <field name="amount"/>
+                    <field name="date"/>
+                    <field name="ref"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='internal_transfer_form'>
+            <field name='name'>Internal Transfer</field>
+            <field name="model">internal.transfer</field>
+            <field name='arch' type='xml'>
+                <form string="Internal Transfer">
+                    <header>
+                        <button name="action_confirm" string="Confirm" states="draft" type="object"
+                                class="oe_highlight"/>
+                        <button name="action_cancel" string="Cancel" states="draft,confirmed" type="object"/>
+                        <button name="action_to_draft" string="To Draft" states="cancel" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_right oe_button_box" name="buttons">
+                        </div>
+                        <group>
+                            <group>
+                                <field name="source_journal_id"/>
+                                <field name="target_journal_id"/>
+                                <field name="amount"/>
+                                <field name="date"/>
+                                <field name="ref"/>
+                                <field name="check_num"/>
+                            </group>
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="fci_assignment_pool">
+            <field name="name">Internal Transfer</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">internal.transfer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="internal_transfer_search"/>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p>
+                    Create Your Internal Transfer
+                </p>
+            </field>
+            <field name="context">{}</field>
+        </record>
+        <record model="ir.actions.act_window.view" id="fci_assignment_pool_form">
+            <field name="act_window_id" ref="fci_assignment_pool"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="internal_transfer_form"/>
+        </record>
+        <record model="ir.actions.act_window.view" id="fci_assignment_pool_tree">
+            <field name="act_window_id" ref="fci_assignment_pool"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="internal_transfer_tree"/>
+        </record>
+
+
+        <record id="view_account_journal_form" model="ir.ui.view">
+            <field name="name">account.journal.form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name="allow_date" position="after">
+                    <field name="allow_account_transfer"
+                           attrs="{'invisible': [('type', 'not in', ('bank', 'cash'))]}"/>
+                </field>
+            </field>
+        </record>
+
+        <menuitem id="account_transfer_menu"
+                  parent="account.menu_finance_bank_and_cash"
+                  action="fci_assignment_pool"
+                  name="Internal Transfer"
+                  sequence="13"/>
+
+    </data>
+</openerp>
