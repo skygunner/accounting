@@ -74,7 +74,7 @@ class internal_transfer(models.Model):
                                                      })
                         bank_cash_object_line.create({'statement_id': x.id,
                                                       'name': x.id,
-                                                      'amount_2': -self.amount,
+                                                      'amount': -self.amount,
                                                       })
                     for i in bank_cash_object.browse(last_target_id):
                         y = bank_cash_object.create({'journal_id': i.journal_id.id,
@@ -87,7 +87,7 @@ class internal_transfer(models.Model):
                                                      })
                         bank_cash_object_line.create({'statement_id': y.id,
                                                       'name': y.id,
-                                                      'amount_2': self.amount,
+                                                      'amount': self.amount,
                                                       })
                 elif self.source_journal_id.type == 'cash':
                     for i in bank_cash_object.browse(last_source_id):
@@ -100,7 +100,7 @@ class internal_transfer(models.Model):
                                                      })
                         bank_cash_object_line.create({'statement_id': x.id,
                                                       'name': x.id,
-                                                      'amount_2': -self.amount,
+                                                      'amount': -self.amount,
                                                       })
                     for i in bank_cash_object.browse(last_target_id):
                         y = bank_cash_object.create({'journal_id': i.journal_id.id,
@@ -112,7 +112,7 @@ class internal_transfer(models.Model):
                                                      })
                         bank_cash_object_line.create({'statement_id': y.id,
                                                       'name': y.id,
-                                                      'amount_2': self.amount,
+                                                      'amount': self.amount,
                                                       })
             elif self.source_journal_id.type == self.target_journal_id.type:
                 for i in bank_cash_object.browse(last_target_id):
@@ -124,7 +124,7 @@ class internal_transfer(models.Model):
                                                  'state': 'open',})
                     bank_cash_object_line.create({'statement_id': y.id,
                                                   'name': y.id,
-                                                  'amount_2': self.amount,
+                                                  'amount': self.amount,
                                                   })
         self.write({
             'target_move_id': target_move.id,
