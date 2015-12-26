@@ -58,7 +58,7 @@ class internal_transfer(models.Model):
         if not soruce_balance:
             raise Warning(_('You have to define at least 1 intial record for this Source journal '))
         elif not target_balance:
-            raise Warning(_('You have to define at least 1 intial record for this Source journal  '))
+            raise Warning(_('You have to define at least 1 intial record for this Target journal  '))
         else:
             last_target_id = max(target_balance)
             last_source_id = max(soruce_balance)
