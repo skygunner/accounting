@@ -56,9 +56,9 @@ class internal_transfer(models.Model):
         soruce_balance = bank_cash_object.search([('journal_id', '=', self.source_journal_id.id)])._ids
         target_balance = bank_cash_object.search([('journal_id', '=', self.target_journal_id.id)])._ids
         if not soruce_balance:
-            raise Warning(_('You have to define records for this Source journal '))
+            raise Warning(_('You have to define at least 1 intial record for this Source journal '))
         elif not target_balance:
-            raise Warning(_('You have to define records for this Target journal '))
+            raise Warning(_('You have to define at least 1 intial record for this Source journal  '))
         else:
             last_target_id = max(target_balance)
             last_source_id = max(soruce_balance)
